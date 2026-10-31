@@ -65,10 +65,29 @@ export function createRateLimiter({ limit = 10, windowMs = 60_000, now = Date.no
 
 export function createAppServer({ env = process.env, fetchImpl = fetch } = {}) {
   const allowRequest = createRateLimiter();
+  const allowedOrigins = new Set(String(env.CORS_ALLOWED_ORIGINS || 'https://baliramsahani9977-afk.github.io,http://127.0.0.1:3000,http://localhost:3000')
+    .split(',').map((origin) => origin.trim()).filter(Boolean));
   return createHttpServer(async (request, response) => {
     response.setHeader('X-Content-Type-Options', 'nosniff');
     response.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     const requestUrl = new URL(request.url, 'http://localhost');
+    const isApiRequest = requestUrl.pathname.startsWith('/api/');
+    const origin = request.headers.origin;
+
+    if (isApiRequest && origin && !allowedOrigins.has(origin)) {
+      return sendJson(response, 403, { error: 'This website is not allowed to access the API.', code: 'origin_not_allowed' });
+    }
+    if (isApiRequest && origin) {
+      response.setHeader('Access-Control-Allow-Origin', origin);
+      response.setHeader('Vary', 'Origin');
+    }
+    if (isApiRequest && request.method === 'OPTIONS') {
+      response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      response.setHeader('Access-Control-Max-Age', '600');
+      response.writeHead(204);
+      return response.end();
+    }
 
     if (requestUrl.pathname === '/api/status' && request.method === 'GET') {
       return sendJson(response, 200, { configured: Boolean(env.GEMINI_API_KEY), model: env.GEMINI_MODEL || 'gemini-3.8-flash' });
@@ -76,17 +95,23 @@ export function createAppServer({ env = process.env, fetchImpl = fetch } = {}) {
 
     if (requestUrl.pathname === '/api/chat' && request.method === 'POST') {
       const forwarded = request.headers['x-forwarded-for'];
-      const clientKey = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : request.socket.remoteAddress || 'local';
+      const forwardedAddresses = typeof forwarded === 'string' ? forwarded.split(',').map((address) => address.trim()).filter(Boolean) : [];
+      const clientKey = forwardedAddresses.at(-1) || request.socket.remoteAddress || 'local';
       if (!allowRequest(clientKey)) return sendJson(response, 429, { error: 'Too many chat requests. Wait a minute and try again.' });
       let body;
       try { body = await readJson(request); }
       catch (error) { return sendJson(response, error.status || 400, { error: error.message, code: 'invalid_request' }); }
-      const result = await requestAssistantAnswer({
-        body,
-        apiKey: env.GEMINI_API_KEY,
-        model: env.GEMINI_MODEL || 'gemini-3.8-flash',
-        fetchImpl
-      });
+      let result;
+      try {
+        result = await requestAssistantAnswer({
+          body,
+          apiKey: env.GEMINI_API_KEY,
+          model: env.GEMINI_MODEL || 'gemini-3.8-flash',
+          fetchImpl
+        });
+      } catch {
+        result = { status: 502, code: 'provider_error', error: 'The AI service could not complete the request.' };
+      }
       return sendJson(response, result.status, result.status === 200
         ? { answer: result.answer, sources: result.sources }
         : { error: result.error, code: result.code });
@@ -114,13 +139,20 @@ export function createAppServer({ env = process.env, fetchImpl = fetch } = {}) {
   });
 }
 
+export function startAppServer({ env = process.env, host = '0.0.0.0' } = {}) {
+  const rawPort = env.PORT === undefined || env.PORT === '' ? '3000' : env.PORT;
+  const port = Number(rawPort);
+  if (!Number.isInteger(port) || port < 0 || port > 65535) throw new Error('PORT must be a valid TCP port number.');
+  const server = createAppServer({ env });
+  server.listen(port, host, () => {
+    console.log('Agri Smart backend listening on ' + host + ':' + server.address().port);
+    if (!env.GEMINI_API_KEY) console.log('Chat is not configured yet. Add GEMINI_API_KEY to the server environment to enable it.');
+  });
+  return server;
+}
+
 const thisFile = fileURLToPath(import.meta.url);
 if (process.argv[1] && pathToFileURL(path.resolve(process.argv[1])).href === pathToFileURL(thisFile).href) {
   await loadLocalEnv();
-  const port = Number(process.env.PORT || 3000);
-  const server = createAppServer();
-  server.listen(port, '127.0.0.1', () => {
-    console.log(`Agri Smart is running at http://127.0.0.1:${port}`);
-    if (!process.env.GEMINI_API_KEY) console.log('Chat is not configured yet. Add GEMINI_API_KEY to .env and restart to enable it.');
-  });
+  startAppServer();
 }

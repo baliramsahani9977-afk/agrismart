@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: agrismart-gemini-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/status
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://baliramsahani9977-afk.github.io

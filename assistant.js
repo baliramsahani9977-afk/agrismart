@@ -69,8 +69,10 @@
     if (error.code === 'safety_blocked') return 'Gemini could not answer this request because it was blocked by its safety checks. Try rephrasing it.';
     if (error.code === 'empty_response') return 'Gemini returned no text for this request. Try rephrasing the question.';
     if (error.code === 'provider_response') return 'Gemini returned an unexpected response format. Please try again.';
-    if (error.code === 'backend_not_found') return 'This page is not connected to the Agri Smart backend. Start it with npm start and open http://127.0.0.1:3000 instead of Live Server.';
-    if (error.code === 'network') return 'Could not reach the Agri Smart backend. Start it with npm start and open http://127.0.0.1:3000.';
+    if (error.code === 'backend_not_found') return 'The configured Agri Smart backend endpoint was not found. Check the backend URL in api-config.js and confirm the Render service is running.';
+    if (error.code === 'backend_url_missing') return 'The chatbot backend URL is not configured for this website. After deploying the backend, add its HTTPS Render URL to api-config.js and publish the updated GitHub Pages site.';
+    if (error.code === 'backend_url_invalid') return 'The configured chatbot backend URL is invalid. Use the HTTPS URL shown for your Render service.';
+    if (error.code === 'network') return 'Could not reach the Agri Smart backend. Check the configured backend URL, Render service status, and allowed GitHub Pages origin.';
     if (error.status === 503) return 'The Gemini API is not configured yet. Add GEMINI_API_KEY to the local server .env file, then restart the server.';
     if (error.status === 429) return 'The service is busy or its usage limit was reached. Wait a moment and try again.';
     if (error.status === 504) return 'The research request took too long. Please try again with a shorter question.';
@@ -80,7 +82,7 @@
 
   async function checkConfiguration() {
     try {
-      const response = await fetch('/api/status');
+      const response = await fetch(window.AgriSmartApi.endpoint('/api/status'));
       if (!response.ok) throw new Error('status');
       const data = await response.json();
       if (data.configured) {
@@ -94,11 +96,18 @@
         updateInitialMessage('The backend is running, but GEMINI_API_KEY is not configured. Add it to .env and restart the backend.');
         showFeedback('The backend is running, but GEMINI_API_KEY is not configured. Add it to .env and restart the backend.', true);
       }
-    } catch {
+    } catch (error) {
+      if (error.code === 'backend_url_missing' || error.code === 'backend_url_invalid') {
+        status.textContent = error.code === 'backend_url_missing' ? 'BACKEND URL REQUIRED' : 'BACKEND URL INVALID';
+        status.className = 'status-pill status-unavailable';
+        updateInitialMessage(explainChatError(error));
+        showFeedback(explainChatError(error), true);
+        return;
+      }
       status.textContent = 'BACKEND OFFLINE';
       status.className = 'status-pill status-unavailable';
-      updateInitialMessage('The chatbot backend is not responding. Start it with npm start, then open this site at http://127.0.0.1:3000.');
-      showFeedback('The chatbot backend is not responding. Start it with npm start, then open this site at http://127.0.0.1:3000 (Live Server cannot handle the AI endpoint).', true);
+      updateInitialMessage('Could not reach the Agri Smart backend. Check the configured backend URL and confirm the Render service is running. For local development, start it with npm start and open http://127.0.0.1:3000.');
+      showFeedback('Could not reach the Agri Smart backend. Check the configured backend URL, Render service status, and allowed GitHub Pages origin. For local development, start it with npm start and open http://127.0.0.1:3000.', true);
     }
   }
 
@@ -130,7 +139,7 @@
 
     const nextConversation = [...conversation, { role: 'user', content: question }].slice(-8);
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch(window.AgriSmartApi.endpoint('/api/chat'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -173,7 +182,9 @@
       else if (error.code === 'quota_or_rate_limit') status.textContent = 'QUOTA CHECK';
       else if (error.code === 'model_unavailable' || error.code === 'provider_access') status.textContent = 'MODEL ACCESS';
       else if (error.code === 'backend_not_found' || error.code === 'network') status.textContent = 'BACKEND OFFLINE';
-      if (['invalid_api_key', 'quota_or_rate_limit', 'model_unavailable', 'provider_access', 'backend_not_found', 'network'].includes(error.code)) {
+      else if (error.code === 'backend_url_missing') status.textContent = 'BACKEND URL REQUIRED';
+      else if (error.code === 'backend_url_invalid') status.textContent = 'BACKEND URL INVALID';
+      if (['invalid_api_key', 'quota_or_rate_limit', 'model_unavailable', 'provider_access', 'backend_not_found', 'network', 'backend_url_missing', 'backend_url_invalid'].includes(error.code)) {
         status.className = 'status-pill status-unavailable';
       }
       addMessage(`I could not get an AI response. ${message}`, 'SERVICE MESSAGE · NO ANSWER GENERATED', 'assistant-message chat-error');

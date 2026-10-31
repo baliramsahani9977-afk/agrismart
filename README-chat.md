@@ -2,6 +2,16 @@
 
 The homepage chat uses Google's Gemini API through the local Node server. Browser code posts questions to `/api/chat`; `server.mjs` reads `GEMINI_API_KEY` from `.env`, calls the Gemini `generateContent` REST endpoint, extracts text from `candidates[].content.parts[].text`, and returns a consistent `{ answer, sources }` JSON object. The browser never receives the key.
 
+## Deploying the backend separately on Render
+
+render.yaml prepares a Render web service on the Free plan; it does not create or deploy a service by itself. The service uses npm ci to install dependencies and npm start to run the existing server, including its auth bundle prestart step. The .node-version file selects Node 24.22.1. The server listens on Render's PORT at 0.0.0.0, keeps /api/status and /api/chat, and checks API request origins against CORS_ALLOWED_ORIGINS. The Render configuration allows the GitHub Pages origin only.
+
+After you choose to deploy, add GEMINI_API_KEY privately in the Render service's Environment settings. GEMINI_MODEL and CORS_ALLOWED_ORIGINS are included in the blueprint. Do not put the key in this repository or GitHub Pages.
+
+Once Render gives the service its HTTPS URL, set window.AGRI_SMART_API_BASE_URL near the top of api-config.js to that exact service origin, without an /api suffix, then publish the updated frontend to GitHub Pages. Keep it empty for local use through npm start; GitHub Pages will show a configuration message until a backend URL is set.
+
+The automated chat tests mock Gemini; they do not make a live provider request. Free Render services can sleep after 15 minutes without traffic, making their next request take about a minute. Free usage limits apply, and exceeding some included bandwidth or build amounts can incur charges if a payment method is on file. Gemini API usage is billed separately by Google. See Render's free service limitations at https://render.com/docs/free, web service docs at https://render.com/docs/web-services, and Node version docs at https://render.com/docs/node-version.
+
 The configured default model is `gemini-3.8-flash`. The request enables Gemini Google Search grounding and shows source links returned in `groundingMetadata`. The assistant prompt prioritizes ICAR, TNAU, FAO, and government sources, but Gemini's built-in Google Search grounding does not enforce a domain allowlist; sources can include other sites. This is live retrieval, not a downloaded agricultural reference database.
 
 ## Requirements and configuration
