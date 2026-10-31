@@ -1,0 +1,562 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7faf4">
+  <meta name="description"
+    content="Agri Smart brings practical, AI-powered agricultural tools together to help farmers make informed decisions.">
+  <title>Agri Smart &mdash; Smarter Farming Starts Here</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="crop-data.js" defer></script>
+  <script src="crop-engine.js" defer></script>
+  <script src="crop-form.js" defer></script>
+  <script src="plant-disease-engine.js" defer></script>
+  <script src="msp-engine.js" defer></script>
+  <script src="weather.js" defer></script>
+  <script src="seasonal.js" defer></script>
+  <script src="monsoon-rain.js" defer></script>
+  <script src="assistant.js" defer></script>
+  <script src="plant-disease.js" defer></script>
+  <script src="msp-dashboard.js" defer></script>
+  <script src="script.js" defer></script>
+  <script src="profile-menu.js" defer></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="#home" aria-label="AgriSmart AI dashboard">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" focusable="false">
+            <path d="M20 35V7" />
+            <path d="M20 13c-5 0-8-3-8-8 5 0 8 3 8 8Zm0 7c-5 0-8-3-8-8 5 0 8 3 8 8Zm0 7c-5 0-8-3-8-8 5 0 8 3 8 8Z" />
+            <path d="M20 10c5 0 8-3 8-8-5 0-8 3-8 8Zm0 7c5 0 8-3 8-8-5 0-8 3-8 8Zm0 7c5 0 8-3 8-8-5 0-8 3-8 8Z" />
+            <path d="M14 35h12" />
+          </svg></span>
+        <span class="brand-copy"><span class="brand-name">AgriSmart AI</span><span class="brand-tagline">PRECISION
+            AGTECH</span></span>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <div class="nav-items">
+          <a class="nav-link active" href="#home">Dashboard</a>
+          <a class="nav-link" href="#tools">AI Tools</a>
+          <a class="nav-link" href="#tool-assistant">Agri-Chatbot</a>
+          <a class="nav-link" href="#tool-calendar">Crop Calendar</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-login" href="#login-dialog" data-login-trigger>Log In</a>
+          <a class="nav-register" href="#contact">Register Farmer</a>
+          <div class="profile-menu-wrap">
+            <button class="profile-menu-trigger" id="profile-menu-trigger" type="button" aria-label="Open profile menu" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-menu">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="8" r="4"/></svg>
+            </button>
+            <div class="profile-menu" id="profile-menu" role="menu" aria-label="Profile options" aria-hidden="true">
+              <button type="button" class="profile-menu-item" role="menuitem" data-profile-login tabindex="-1">Login</button>
+              <a class="profile-menu-item" role="menuitem" href="#about" tabindex="-1">About</a>
+              <button type="button" class="profile-menu-item profile-logout" role="menuitem" data-profile-logout disabled tabindex="-1" aria-describedby="logout-status">Logout <span id="logout-status">Not signed in</span></button>
+              <button type="button" class="profile-menu-item profile-theme" role="menuitemcheckbox" aria-checked="false" data-theme-toggle tabindex="-1"><span>Dark Mode</span><span class="theme-switch" aria-hidden="true"><i></i></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
+        aria-controls="nav-links"><span></span><span></span></button>
+    </nav>
+  </header>
+
+  <dialog class="login-info-dialog" id="login-dialog" aria-labelledby="login-dialog-title">
+    <button class="login-dialog-close" type="button" aria-label="Close sign-in information" data-login-close>&times;</button>
+    <span class="login-dialog-kicker">ACCOUNT ACCESS</span>
+    <h2 id="login-dialog-title">Sign-in isn’t set up yet</h2>
+    <p>Agri Smart does not currently have a secure authentication service. No password has been requested or saved. Farmer registration is available through the existing contact section.</p>
+    <button class="button button-primary" type="button" data-login-close>Got it</button>
+  </dialog>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> THE FUTURE OF FARMING</div>
+          <h1>Smarter farming<br>starts <span>here.</span></h1>
+          <p class="hero-description">Good decisions grow great harvests. Bring practical farming insights and
+            AI-powered tools together, all in one place.</p>
+          <div class="hero-actions"><a class="button button-primary" href="#services">Explore services <span
+                aria-hidden="true">&rarr;</span></a><a class="button button-text" href="#about">Learn more <span
+                aria-hidden="true">&#8599;</span></a></div>
+          <div class="hero-note"><span class="note-icon" aria-hidden="true">&#10035;</span><span>Thoughtful tools for a
+              more<br><strong>confident growing season.</strong></span></div>
+        </div>
+        <div class="hero-visual seasonal-visual season-winter" id="seasonal-scene"
+          aria-label="Illustrated seasonal farm landscape">
+          <div class="visual-label"><span class="live-dot"></span> A LIVING FARM LANDSCAPE</div>
+          <svg class="seasonal-art" viewBox="0 0 820 520" role="img"
+            aria-labelledby="seasonal-art-title seasonal-art-desc" preserveAspectRatio="xMidYMid slice">
+            <title id="seasonal-art-title">A farmer in a changing seasonal landscape</title>
+            <desc id="seasonal-art-desc">A rural woman stands beside crop fields beneath a tree, with seasonal weather
+              and colors that update through the year.</desc>
+            <defs>
+              <linearGradient id="season-sky" x1="0" y1="0" x2="0" y2="1">
+                <stop class="sky-top" offset="0" />
+                <stop class="sky-bottom" offset="1" />
+              </linearGradient>
+              <linearGradient id="season-field" x1="0" y1="0" x2="1" y2="1">
+                <stop class="field-top" offset="0" />
+                <stop class="field-bottom" offset="1" />
+              </linearGradient>
+              <linearGradient id="woman-clothes" x1="0" y1="0" x2="1" y2="1">
+                <stop class="clothes-light" offset="0" />
+                <stop class="clothes-dark" offset="1" />
+              </linearGradient>
+              <linearGradient id="tree-leaves" x1="0" y1="0" x2="1" y2="1">
+                <stop class="leaf-light" offset="0" />
+                <stop class="leaf-dark" offset="1" />
+              </linearGradient>
+              <filter id="soft-blur">
+                <feGaussianBlur stdDeviation="12" />
+              </filter>
+            </defs>
+            <rect width="820" height="520" fill="url(#season-sky)" />
+            <circle class="season-sun" cx="650" cy="105" r="51" />
+            <ellipse class="season-glow" cx="650" cy="120" rx="145" ry="105" filter="url(#soft-blur)" />
+            <g class="season-cloud cloud-one">
+              <path
+                d="M430 128c0-17 14-30 31-30 8-24 42-28 55-5 23-7 45 9 43 32 18 2 29 13 29 27H432c-12-5-15-15-2-24Z" />
+            </g>
+            <g class="season-cloud cloud-two">
+              <path d="M95 165c2-18 19-30 37-25 13-21 43-18 51 4 17 1 28 13 25 28H97c-5-2-6-4-2-7Z" />
+            </g>
+            <path class="distant-hill" d="M0 278c107-84 177-72 273-16 107-83 186-55 276-6 94-81 167-64 271-2v151H0Z" />
+            <path class="middle-field" fill="url(#season-field)"
+              d="M0 322c126-46 238-46 364-3 130-49 287-40 456 12v189H0Z" />
+            <path class="near-field" d="M0 398c159-52 328-32 460 8 136-55 249-39 360-7v121H0Z" />
+            <g class="field-rows" fill="none" stroke-linecap="round">
+              <path d="M90 520c75-91 152-150 248-193" />
+              <path d="M178 520c73-87 143-144 230-186" />
+              <path d="M276 520c65-78 129-126 212-167" />
+              <path d="M385 520c54-67 111-109 190-144" />
+              <path d="M510 520c41-51 89-86 154-114" />
+              <path d="M650 520c28-36 58-58 98-77" />
+            </g>
+            <g class="village" opacity=".72">
+              <path d="M112 304v-38l34-27 37 27v42h-18v-26h-18v26Z" />
+              <path d="M179 307v-29l24-18 26 18v34h-13v-20h-14v20Z" />
+            </g>
+            <g class="farm-tree">
+              <path class="tree-trunk"
+                d="M179 376c15-61 10-104 1-146 21 33 29 64 27 91 15-28 34-50 59-68-16 30-25 58-31 84 23-19 50-27 75-31-33 21-57 43-73 69Z" />
+              <g class="tree-crown" fill="url(#tree-leaves)">
+                <circle cx="188" cy="205" r="48" />
+                <circle cx="143" cy="226" r="36" />
+                <circle cx="231" cy="224" r="40" />
+                <circle cx="273" cy="242" r="30" />
+                <circle cx="194" cy="163" r="34" />
+              </g>
+              <g class="tree-blossoms">
+                <circle cx="153" cy="218" r="5" />
+                <circle cx="205" cy="176" r="5" />9
+                <circle cx="238" cy="228" r="5" />
+              </g>
+            </g>
+            <g class="crop-stems" fill="none" stroke-linecap="round">
+              <path
+                d="M58 415v-32m0 17-9-9m9 17 10-11M95 401v-39m0 23-10-9m10 18 11-12M290 415v-30m0 15-9-9m9 18 10-11M350 400v-37m0 22-10-9m10 17 11-12M725 411v-35m0 21-9-9m9 17 11-12M770 430v-38m0 21-10-9m10 18 12-11" />
+            </g>
+            <g class="farmer">
+              <path class="farmer-hair" d="M563 235c0-28 19-48 45-48 28 0 47 21 44 51l-8 39h-77Z" />
+              <ellipse class="farmer-face" cx="608" cy="239" rx="30" ry="35" />
+              <path class="farmer-hair-front"
+                d="M578 231c4-26 20-39 43-38 17 1 30 13 33 31-15-8-25-18-28-27-8 16-25 27-48 34Z" />
+              <path class="farmer-neck" d="M597 265h23v23h-23Z" />
+              <path class="farmer-body" fill="url(#woman-clothes)"
+                d="M580 283c13-10 42-10 56 0 16 14 22 51 28 91l-14 59h-93l-12-57c7-43 15-78 35-93Z" />
+              <path class="farmer-apron" d="M590 298c12 5 26 4 38-1l16 125h-73Z" />
+              <path class="farmer-arm"
+                d="M580 294c-16 11-27 38-35 64l-24 12c-8 4-4 17 5 15l35-11c9-3 16-13 20-24l17-37Z" />
+              <path class="farmer-arm" d="M634 294c13 9 21 26 29 45l-8 13c-6 8 6 17 13 9l17-19c5-6 4-14 1-21l-20-36Z" />
+              <path class="farmer-hand" d="M521 366c-9 1-15 8-12 14 4 7 15 5 22 1l9-7-5-10Z" />
+              <path class="farmer-skirt" d="M565 415h94l-17 47h-83Z" />
+              <path class="farmer-leg" d="m578 455-9 45h21l15-45m27 0 8 45h22l-6-47" />
+              <path class="farmer-shoe"
+                d="M562 497h31c5 0 7 7 0 10h-36c-8 0-5-9 5-10Zm72 0h31c9 1 12 9 3 10h-34c-7-1-7-8 0-10Z" />
+              <g class="winter-wrap">
+                <path d="M581 280c11 15 38 19 55 2l12 17c-19 24-49 28-75 9Z" />
+                <path d="M617 294c12 22 13 40 7 57l-15-7c6-19 1-33-8-47Z" />
+              </g>
+              <g class="tea-cup">
+                <path d="M514 352h20v19c0 8-18 8-20 0Z" />
+                <path d="M534 356h6c7 0 6 10-1 10h-5" fill="none" />
+              </g>
+              <g class="rain-umbrella">
+                <path d="M538 224c5-48 99-62 130-7-20-11-31 10-48 0-12-8-22-5-32 3-16-12-31-12-50 4Z" />
+                <path d="M604 215v67c0 12 18 14 22 2" fill="none" />
+              </g>
+            </g>
+            <g class="steam-lines" fill="none">
+              <path d="M518 344c-9-12 9-14 1-27" />
+              <path d="M529 342c-8-10 8-15 1-24" />
+            </g>
+            <g class="season-rain-cloud">
+              <path
+                d="M328 190c0-20 18-34 38-30 10-26 47-28 60-2 24-6 48 11 45 35 19 2 31 16 29 33H343c-14-7-18-25-15-36Z" />
+            </g>
+            <path class="ground" d="M0 474c109-20 210-8 308 9 117-20 244-13 512-7v44H0Z" />
+          </svg>
+          <div class="monsoon-haze" aria-hidden="true"></div>
+          <canvas class="monsoon-rain-canvas" id="monsoon-rain-canvas" aria-hidden="true"></canvas>
+          <div class="seasonal-atmosphere" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="seasonal-season-card" id="seasonal-indicator" aria-live="polite"><span class="seasonal-card-icon"
+              id="seasonal-indicator-icon" aria-hidden="true">&#10022;</span><span><strong
+                id="seasonal-season-label">Seasonal landscape</strong><small><span id="seasonal-location-label">Northern
+                  India (default)</span><br><span id="seasonal-weather-label">Calendar scene · actual weather not
+                  checked</span></small></span></div>
+          <button class="season-location-button" id="season-use-location" type="button"
+            aria-label="Use approximate browser location to update the seasonal scene">Use my location</button>
+          <p class="season-location-feedback" id="season-location-feedback" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="hero-bottom container"><span>GROWING A BETTER TOMORROW</span><span class="bottom-line"></span><span>01
+          &mdash; 06</span></div>
+    </section>
+
+    <section class="services section" id="services">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-dot"></span> YOUR FARM, WITH MORE INSIGHT</div>
+            <h2>Tools for every<br><span>step of the season.</span></h2>
+          </div>
+          <p>From choosing what to grow to planning your next harvest, find helpful tools designed around the decisions
+            farmers make every day.</p>
+        </div>
+        <div class="service-grid">
+          <a class="service-card" href="#tool-crop"><span class="service-icon icon-leaf">&#10035;</span><span
+              class="card-number">01</span>
+            <h3>Crop Suitability<br>Screening</h3>
+            <p>Compare field conditions with sourced crop environment ranges.</p><span class="card-link">Open crop form
+              <b>&#8599;</b></span>
+          </a>
+          <a class="service-card" href="#tool-disease"><span class="service-icon icon-scan">&#8961;</span><span
+              class="card-number">02</span>
+            <h3>Plant Disease<br>Detection</h3>
+            <p>Screen supported bean, cassava, and maize leaf classes in your browser.</p><span class="card-link">Screen a leaf
+              <b>&#8599;</b></span>
+          </a>
+          <a class="service-card" href="#tool-weather"><span class="service-icon icon-sun">&#9788;</span><span
+              class="card-number">03</span>
+            <h3>Weather<br>Forecast</h3>
+            <p>Look up live conditions and a five-day forecast for a city.</p><span class="card-link">Check the forecast
+              <b>&#8599;</b></span>
+          </a>
+          <a class="service-card" href="#tool-price"><span class="service-icon icon-chart">&#8961;</span><span
+              class="card-number">04</span>
+            <h3>Crop Price<br>Prediction</h3>
+            <p>Browse officially announced Minimum Support Prices, not local mandi prices.</p><span class="card-link">View MSP data
+              <b>&#8599;</b></span>
+          </a>
+          <a class="service-card" href="#tool-assistant"><span class="service-icon icon-chat">&#10035;</span><span
+              class="card-number">05</span>
+            <h3>AI Farming<br>Assistant</h3>
+            <p>Ask farming questions with sourced web research when configured.</p><span class="card-link">Open
+              assistant <b>&#8599;</b></span>
+          </a>
+          <a class="service-card" href="#tool-calendar"><span class="service-icon icon-calendar">&#9638;</span><span
+              class="card-number">06</span>
+            <h3>Crop<br>Calendar</h3>
+            <p>Add and review your own planting dates and farm reminders.</p><span class="card-link">Open calendar
+              <b>&#8599;</b></span>
+          </a>
+        </div>
+        <p class="demo-note"><span>&#10035;</span> Weather forecasts use live Open-Meteo data. Crop screening is rule
+          based; market data is not connected. The assistant needs a server-side API key.</p>
+      </div>
+    </section>
+
+    <section class="tools section" id="tools" aria-labelledby="tools-title">
+      <div class="container">
+        <div class="section-heading tools-heading">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-dot"></span> INTERACTIVE FARM TOOLS</div>
+            <h2 id="tools-title">A hands-on look<br><span>at Agri Smart.</span></h2>
+          </div>
+          <p>Explore farm-planning tools. Chat messages are sent to the configured AI service; calendar reminders stay
+            in this browser. There is no farm account or database.</p>
+        </div>
+        <div class="tools-grid">
+          <article class="tool-panel" id="tool-crop">
+            <div class="tool-title">
+              <div><span class="tool-kicker">01 / CROP PLANNING</span>
+                <h3>Crop suitability screening</h3>
+              </div><span class="status-pill status-demo">RULE BASED</span>
+            </div>
+            <p class="tool-intro">A transparent screening compares mean crop-growth temperature, annual rainfall and
+              soil pH with FAO EcoCrop ranges. It is not a trained AI model or a local agronomy recommendation. NPK,
+              humidity, soil type and location are collected but not scored because comparable local thresholds are
+              unavailable.</p>
+            <form id="crop-form" class="field-form" novalidate>
+              <label class="field-wide">Location (context only)<input name="location" type="text" maxlength="100"
+                  placeholder="Town, district or region"></label>
+              <label>Soil type (not scored)<select name="soilType">
+                  <option value="">Choose soil type</option>
+                  <option>Clay</option>
+                  <option>Loamy</option>
+                  <option>Sandy</option>
+                  <option>Silty</option>
+                  <option>Other / unsure</option>
+                </select></label>
+              <label>Mean temperature during crop growth (&deg;C)<input name="temperature" type="number" min="-100"
+                  max="100" step="0.1" placeholder="e.g. 24" required></label>
+              <label>Nitrogen (N; lab value)<input name="nitrogen" type="number" min="0" step="0.1"
+                  placeholder="Optional; units vary"></label>
+              <label>Phosphorus (P; lab value)<input name="phosphorus" type="number" min="0" step="0.1"
+                  placeholder="Optional; units vary"></label>
+              <label>Potassium (K; lab value)<input name="potassium" type="number" min="0" step="0.1"
+                  placeholder="Optional; units vary"></label>
+              <label>Relative humidity (%) (not scored)<input name="humidity" type="number" min="0" max="100" step="0.1"
+                  placeholder="Optional"></label>
+              <label>Soil pH<input name="ph" type="number" min="0" max="14" step="0.1" placeholder="e.g. 6.5"
+                  required></label>
+              <label>Annual rainfall (mm/year)<input name="rainfall" type="number" min="0" step="0.1"
+                  placeholder="e.g. 800" required></label>
+              <button class="button button-primary" type="submit">Screen crop ranges <span
+                  aria-hidden="true">&rarr;</span></button>
+            </form>
+            <div class="crop-results" id="crop-results" aria-live="polite" aria-atomic="true">
+              <p class="form-feedback">Enter mean crop-growth temperature, annual rainfall and soil pH to see a
+                preliminary range comparison. Optional inputs are validated but are not scored.</p>
+            </div>
+          </article>
+
+          <article class="tool-panel" id="tool-disease">
+            <div class="tool-title">
+              <div><span class="tool-kicker">02 / PLANT HEALTH</span>
+                <h3>Leaf disease screening</h3>
+              </div><span class="status-pill status-local">ON-DEVICE MODEL</span>
+            </div>
+            <p class="tool-intro">A compact image classifier runs in this browser. Your image stays on this device.
+            </p>
+            <form id="image-form" class="image-form">
+              <label class="disease-crop-label" for="plant-crop">Which crop is shown?</label>
+              <select id="plant-crop" class="disease-crop-select" required>
+                <option value="">Choose a supported crop</option>
+                <option value="maize">Maize</option>
+                <option value="cassava">Cassava</option>
+                <option value="bean">Bean</option>
+                <option value="other">Another crop / not sure</option>
+              </select>
+              <label class="upload-box" for="plant-image"><span class="upload-symbol"
+                  aria-hidden="true">+</span><strong>Choose a leaf photograph</strong><small>JPG, PNG, GIF or WebP &middot;
+                  up to 5 MB</small><input id="plant-image" type="file" required
+                  accept="image/jpeg,image/png,image/gif,image/webp"></label>
+              <p class="form-feedback" id="image-feedback" role="status" aria-live="polite">Select a supported crop and image to begin.</p>
+              <div class="image-preview" id="image-preview" hidden><img id="preview-image"
+                  alt="Selected plant image preview"><button type="button" class="text-button" id="clear-image">Remove
+                  image</button></div>
+              <button type="submit" class="button button-primary disease-analyze" id="analyze-plant" disabled>Analyze leaf</button>
+              <div class="disease-result" id="disease-result" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+            </form>
+            <p class="disease-limitations">This model screens only bean angular leaf spot, cassava mosaic, and three maize classes (healthy, northern leaf blight, common rust). It cannot identify other crops or diseases. A model score is not diagnostic certainty; field conditions may differ from its training images. Confirm with a local agricultural extension expert before treatment. <a href="https://huggingface.co/DrUkachi/ktt-crop-disease-classifier" target="_blank" rel="noopener noreferrer">Model card, classes and limitations</a>.</p>
+          </article>
+
+          <article class="tool-panel calendar-panel" id="tool-calendar">
+            <div class="tool-title">
+              <div><span class="tool-kicker">03 / SEASON PLANNER</span>
+                <h3>Your crop calendar</h3>
+              </div><span class="status-pill status-local">IN THIS BROWSER</span>
+            </div>
+            <p class="tool-intro">Add personal reminders and navigate months. Events are saved only in this browser.</p>
+            <div class="calendar-controls"><button type="button" id="calendar-prev"
+                aria-label="Previous month">&#8249;</button><strong id="calendar-month"
+                aria-live="polite"></strong><button type="button" id="calendar-next"
+                aria-label="Next month">&#8250;</button></div>
+            <div class="calendar-weekdays" aria-hidden="true">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="calendar-days" id="calendar-days" role="grid" aria-label="Calendar dates"></div>
+            <form id="event-form" class="event-form"><label>Reminder<input name="title" type="text" maxlength="80"
+                  placeholder="e.g. Check irrigation" required></label><label>Date<input name="date" type="date"
+                  required></label><button class="button button-primary" type="submit">Add reminder <span
+                  aria-hidden="true">+</span></button></form>
+            <p class="form-feedback" id="calendar-feedback" role="status" aria-live="polite">Your reminders are stored
+              locally on this device only.</p>
+            <ul class="event-list" id="event-list" aria-label="Reminders for this month"></ul>
+          </article>
+
+          <article class="tool-panel chat-panel" id="tool-assistant">
+            <div class="tool-title">
+              <div><span class="tool-kicker">04 / FARMING ASSISTANT</span>
+                <h3>Ask a question</h3>
+              </div><span class="status-pill status-demo" id="chat-status">AI SETUP REQUIRED</span>
+            </div>
+            <p class="tool-intro">Ask farming questions in your own words. Answers use an AI model with web research
+              limited to selected agricultural and government sources. Advice is informational; confirm important
+              decisions with your local KVK or agricultural expert.</p>
+            <div class="chat-options">
+              <label for="chat-language">Reply language<select id="chat-language" name="language">
+                  <option value="English">English</option>
+                  <option value="Hindi">Hindi</option>
+                </select></label>
+              <label for="chat-location">Your location <span>(optional)</span><input id="chat-location" name="location"
+                  type="text" maxlength="100" placeholder="District, state, country"></label>
+              <button type="button" class="text-button chat-new" id="chat-new">Start new chat</button>
+            </div>
+            <div class="chat-window" id="chat-window" role="log" aria-live="polite"
+              aria-label="Agricultural assistant conversation">
+              <div class="chat-message assistant-message"><span class="chat-speaker">AGRI SMART ASSISTANT</span>
+                <p id="chat-initial-message">Checking the chatbot server configuration...</p>
+              </div>
+            </div>
+            <form class="chat-form" id="chat-form"><label class="visually-hidden" for="chat-input">Your farming
+                question</label><input id="chat-input" name="message" type="text" maxlength="1000"
+                placeholder="Ask about crops, soil, irrigation, pests..." autocomplete="off" required><button
+                type="submit" aria-label="Send message">Send <span aria-hidden="true">&rarr;</span></button></form>
+            <p class="form-feedback" id="chat-feedback" role="status" aria-live="polite">Responses are AI-generated. Ask
+              for local details when needed; never use chat alone to make pesticide or fertilizer decisions.</p>
+          </article>
+
+          <article class="tool-panel weather-panel" id="tool-weather" aria-labelledby="weather-title">
+            <div class="tool-title">
+              <div><span class="tool-kicker">05 / WEATHER</span>
+                <h3 id="weather-title">Live weather forecast</h3>
+              </div><span class="status-pill status-local" id="weather-status">READY TO SEARCH</span>
+            </div>
+            <p class="tool-intro">Search for a town or city anywhere in the world. Weather data is provided live by
+              Open-Meteo; forecast conditions can change.</p>
+            <form class="weather-search" id="weather-search-form" novalidate>
+              <label for="weather-location">City or town</label>
+              <div class="weather-search-row"><input id="weather-location" name="location" type="search" maxlength="100"
+                  placeholder="e.g. Nairobi or Springfield, Illinois" autocomplete="off" required><button
+                  class="button button-primary" id="weather-search-button" type="submit">Search weather <span
+                    aria-hidden="true">&#8594;</span></button></div>
+            </form>
+            <p class="form-feedback weather-message" id="weather-message" role="status" aria-live="polite">Enter at
+              least two characters to search for a location.</p>
+            <div class="weather-location-picker" id="weather-location-picker" hidden></div>
+            <button class="weather-retry" id="weather-retry" type="button" hidden>Try again</button>
+            <div class="weather-results" id="weather-results" aria-live="polite" hidden>
+              <div class="weather-current">
+                <div class="weather-place"><span class="weather-icon" id="current-weather-icon"
+                    aria-hidden="true"></span>
+                  <div>
+                    <h4 id="weather-place-name"></h4>
+                    <p id="weather-place-region"></p>
+                    <p id="current-weather-description"></p>
+                  </div>
+                </div>
+                <div class="weather-temperature"><strong id="current-temperature">—</strong><span>Current
+                    temperature</span></div>
+                <dl class="weather-metrics">
+                  <div>
+                    <dt>Feels like</dt>
+                    <dd id="current-apparent-temperature">—</dd>
+                  </div>
+                  <div>
+                    <dt>Humidity</dt>
+                    <dd id="current-humidity">—</dd>
+                  </div>
+                  <div>
+                    <dt>Wind</dt>
+                    <dd id="current-wind">—</dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="weather-daily-heading">
+                <h4>Next five days</h4><span id="weather-updated"></span>
+              </div>
+              <div class="weather-daily" id="weather-daily"></div>
+              <p class="weather-attribution">Weather forecast from <a href="https://open-meteo.com/" target="_blank"
+                  rel="noopener noreferrer">Open-Meteo</a>. Units: &deg;C and km/h.</p>
+            </div>
+          </article>
+          <article class="tool-panel status-panel" id="tool-price">
+            <div class="tool-title">
+              <div><span class="tool-kicker">06 / MARKET INSIGHTS</span>
+                <h3>Official MSP dashboard</h3>
+              </div><span class="status-pill status-demo" id="msp-status">LOADING MSP DATA</span>
+            </div>
+            <p class="tool-intro">Minimum Support Prices announced by the Government of India, shown by crop and marketing season. MSP is not a live mandi price, prediction, or guarantee that a procurement centre will buy a farmer’s produce.</p>
+            <div id="msp-feedback" class="form-feedback" role="status" aria-live="polite">Loading the verified MSP snapshot…</div>
+            <div class="msp-controls" aria-label="Filter official MSP records">
+              <label for="msp-search">Find a crop
+                <input id="msp-search" type="search" placeholder="e.g. wheat, paddy, sarson" autocomplete="off">
+              </label>
+              <label for="msp-season">Season
+                <select id="msp-season"><option value="all">All available seasons</option><option value="Kharif">Kharif</option><option value="Rabi">Rabi</option></select>
+              </label>
+              <label for="msp-year">Marketing year
+                <select id="msp-year"><option value="latest">Latest available by season</option></select>
+              </label>
+            </div>
+            <div id="msp-results" class="msp-results" aria-live="polite" aria-busy="true"></div>
+            <p class="msp-provenance">Snapshot coverage: 14 mandated Kharif crops (with official grades/staples shown separately) and six mandated Rabi crops. Jute and copra are not included in this snapshot. This project uses a bundled, manually maintained snapshot of official Cabinet MSP releases; the government source does not provide a public JSON API used by this page. If the snapshot cannot load, the dashboard will say so and can use only a previously cached verified snapshot. <a href="https://cacp.da.gov.in/Home/MSP" target="_blank" rel="noopener noreferrer">CACP MSP page</a> · <a href="https://desagri.gov.in/divisions-cell/msp-section/" target="_blank" rel="noopener noreferrer">DES Agri MSP Section</a>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about section" id="about">
+      <div c lass="container about-grid">
+        <div class="about-art">
+          <div class="about-art-bg"></div>
+          <div class="about-stamp"><span>GROW<br>SMARTER</span><b>&#10035;</b><small>ONE SEASON AT A TIME</small></div>
+          <div class="about-leaf leaf-one">&#10087;</div>
+          <div class="about-leaf leaf-two">&#10087;</div>
+          <div class="about-art-label">ROOTED IN BETTER DECISIONS</div>
+        </div>
+        <div class="about-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> A BETTER WAY TO GROW</div>
+          <h2>Farming knowledge,<br><span>within reach.</span></h2>
+          <p>Every farm is different. Agri Smart is being built to make useful agricultural information easier to find,
+            understand, and put to work.</p>
+          <p>Our vision brings emerging AI tools and farmer-first design together, helping growers feel more prepared at
+            every stage of the season.</p><a class="button button-primary" href="#contact">Get in touch <span
+              aria-hidden="true">&rarr;</span></a>
+          <div class="about-values">
+            <div><b>01</b><span>Practical<br>by design</span></div>
+            <div><b>02</b><span>Built around<br>farmers</span></div>
+            <div><b>03</b><span>Growing with<br>technology</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact section" id="contact">
+      <div class="container contact-inner">
+        <div>
+          <div class="eyebrow eyebrow-light"><span class="eyebrow-dot"></span> LET'S GROW TOGETHER</div>
+          <h2>Have a question?<br><span>We'd love to hear.</span></h2>
+          <p>Tell us what would make your growing season a little easier.</p>
+        </div>
+        <form class="contact-form" id="contact-form"><label for="email">Your email address</label>
+          <div class="email-field"><input id="email" type="email" name="email" placeholder="you@example.com"
+              required><button type="submit" aria-label="Submit email">&rarr;</button></div><small
+            id="form-message">This demo form does not send or store your information.</small>
+        </form>
+        <div class="contact-decoration" aria-hidden="true">&#10035;</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-main"><a class="brand footer-brand" href="#home"><span class="brand-mark"
+          aria-hidden="true"><svg viewBox="0 0 40 40">
+            <path d="M20 34V17m0 8c-8 0-12-5-12-13 8 0 12 4 12 11m0-1c0-8 4-13 12-13 0 8-4 13-12 13" />
+            <path d="M9 31c4-3 8-4 11-4s7 1 11 4" />
+          </svg></span><span>agri<span class="brand-light">smart</span></span></a>
+      <p>Smarter tools for a<br>healthier growing season.</p>
+      <div class="footer-nav"><a href="#home">Home</a><a href="#services">Services</a><a href="#about">About us</a><a
+          href="#contact">Contact</a></div><a class="back-top" href="#home" aria-label="Back to top">&#8593;</a>
+    </div>
+    <div class="container footer-bottom"><span>&copy; <span id="year"></span> Agri Smart. Made for a growing
+        future.</span><span>AN EARLY LOOK AT WHAT'S POSSIBLE</span></div>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agri Smart weather tests</title>
+  <style>
+    body{max-width:850px;margin:40px auto;padding:0 20px;font:16px/1.6 system-ui,sans-serif;color:#20342a;background:#f8faf6}h1{font-size:1.7rem}#summary{font-weight:700;padding:12px 14px;background:#edf3e8;border-radius:5px}.run-button{border:0;border-radius:5px;padding:11px 18px;background:#1d573e;color:#fff;font:600 15px system-ui,sans-serif;cursor:pointer}.run-button:disabled{opacity:.65;cursor:wait}.test-list{padding:0;list-style:none}.test-list li{padding:10px 12px;margin:8px 0;border-radius:5px;background:#fff;border:1px solid #dfe7dc}.pass{color:#25633c}.fail{color:#a22}.note{color:#58695c;font-size:.9rem}
+  </style>
+  <script src="../weather.js" defer></script>
+  <script src="weather-tests.js" defer></script>
+</head>
+<body>
+  <h1>Agri Smart weather tests</h1>
+  <p class="note">These checks use mocked responses and do not request live weather. Use the main website to test the real Open-Meteo connection.</p>
+  <button class="run-button" id="run-tests" type="button">Run Tests</button>
+  <p id="summary" role="status" aria-live="polite">Ready. Select Run Tests to begin.</p>
+  <ol class="test-list" id="test-results"></ol>
+</body>
+</html>

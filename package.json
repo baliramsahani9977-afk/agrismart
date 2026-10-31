@@ -1,0 +1,23 @@
+{
+  "name": "agri-smart",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "prestart": "npm run build:auth",
+    "start": "node server.mjs",
+    "build:auth": "node build-auth.mjs",
+    "test:chat": "node --test tests/chat-tests.mjs",
+    "test:disease": "node --test tests/plant-disease-tests.mjs",
+    "test:msp": "node --test tests/msp-dashboard-tests.mjs"
+  },
+  "dependencies": {
+    "oidc-client-ts": "^3.5.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}
